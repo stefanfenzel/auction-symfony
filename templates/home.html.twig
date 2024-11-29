@@ -1,0 +1,6 @@
+{% for auction in auctions %}
+    <h2>{{ auction.title }}</h2>
+    <p>{{ auction.description }}</p>
+    <p>Price: {{ auction.startPrice }}</p>
+    <p>Ends at: {{ auction.endDate|date('Y-m-d H:i:s') }}</p>
+{% endfor %}

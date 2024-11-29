@@ -2,20 +2,19 @@
 
 namespace App\Entity;
 
-use App\Domain\Uuid;
-use App\Repository\AuctionRepository;
+use App\Repository\DoctrineAuctionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
 
-#[ORM\Entity(repositoryClass: AuctionRepository::class)]
+#[ORM\Entity(repositoryClass: DoctrineAuctionRepository::class)]
+#[ORM\Table(name: 'auctions')]
 class Auction
 {
     #[ORM\Id]
-    #[ORM\Column(type: UuidType::NAME, length: 36)]
-    private ?Uuid $id = null;
+    #[ORM\Column(type: 'string', length: 36)]
+    private ?string $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'auctions')]
     #[ORM\JoinColumn(nullable: false)]
@@ -50,12 +49,12 @@ class Auction
         $this->offers = new ArrayCollection();
     }
 
-    public function getId(): ?Uuid
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function setId(Uuid $id): static
+    public function setId(string $id): static
     {
         $this->id = $id;
 

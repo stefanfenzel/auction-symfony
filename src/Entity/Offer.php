@@ -2,17 +2,16 @@
 
 namespace App\Entity;
 
-use App\Domain\Uuid;
-use App\Repository\OfferRepository;
+use App\Repository\DoctrineOfferRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
 
-#[ORM\Entity(repositoryClass: OfferRepository::class)]
+#[ORM\Entity(repositoryClass: DoctrineOfferRepository::class)]
+#[ORM\Table(name: 'offers')]
 class Offer
 {
     #[ORM\Id]
-    #[ORM\Column(type: UuidType::NAME, length: 36)]
-    private ?Uuid $id = null;
+    #[ORM\Column(type: 'string', length: 36)]
+    private ?string $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'offers')]
     #[ORM\JoinColumn(nullable: false)]
@@ -28,12 +27,12 @@ class Offer
     #[ORM\Column]
     private ?\DateTimeImmutable $bidTime = null;
 
-    public function getId(): ?Uuid
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function setId(Uuid $id): static
+    public function setId(string $id): static
     {
         $this->id = $id;
 
