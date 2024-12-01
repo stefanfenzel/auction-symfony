@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Infrastructure\Auctions\Repository;
 
 use App\Domain\Auctions\AuctionRepositoryInterface;
 use App\Domain\Uuid;

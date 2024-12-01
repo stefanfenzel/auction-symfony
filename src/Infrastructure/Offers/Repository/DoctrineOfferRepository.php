@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Infrastructure\Offers\Repository;
 
 use App\Domain\Offers\OfferRepositoryInterface;
 use App\Entity\Offer;

@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\DoctrineOfferRepository;
+use App\Infrastructure\Offers\Repository\DoctrineOfferRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DoctrineOfferRepository::class)]
