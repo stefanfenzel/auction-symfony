@@ -2,8 +2,8 @@
 
 namespace App\Infrastructure\Offers\Repository;
 
+use App\Domain\Offers\Offer;
 use App\Domain\Offers\OfferRepositoryInterface;
-use App\Entity\Offer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

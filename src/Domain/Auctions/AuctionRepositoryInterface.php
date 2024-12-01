@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domain\Auctions;
 
 use App\Domain\Uuid;
-use App\Entity\Auction;
 use Doctrine\Common\Collections\ArrayCollection;
 
 interface AuctionRepositoryInterface

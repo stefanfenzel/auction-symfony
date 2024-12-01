@@ -2,9 +2,9 @@
 
 namespace App\Infrastructure\Auctions\Repository;
 
+use App\Domain\Auctions\Auction;
 use App\Domain\Auctions\AuctionRepositoryInterface;
 use App\Domain\Uuid;
-use App\Entity\Auction;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;

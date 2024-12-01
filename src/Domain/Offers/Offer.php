@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace App\Domain\Offers;
 
+use App\Domain\Auctions\Auction;
+use App\Domain\Users\User;
 use App\Infrastructure\Offers\Repository\DoctrineOfferRepository;
 use Doctrine\ORM\Mapping as ORM;
 

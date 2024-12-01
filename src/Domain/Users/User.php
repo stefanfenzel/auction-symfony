@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Domain\Users;
 
+use App\Domain\Auctions\Auction;
 use App\Infrastructure\Users\Repository\DoctrineUserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
