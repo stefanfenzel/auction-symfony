@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\App\Auctions\Controller;
 
 use App\Repository\DoctrineAuctionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

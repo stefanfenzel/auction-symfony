@@ -1,5 +1,17 @@
-controllers:
+auctions_controllers:
     resource:
-        path: ../src/Controller/
-        namespace: App\Controller
+        path: ../src/App/Auctions/Controller/
+        namespace: App\App\Auctions\Controller
+    type: attribute
+
+offers_controllers:
+    resource:
+        path: ../src/App/Offers/Controller/
+        namespace: App\App\Offers\Controller
+    type: attribute
+
+users_controllers:
+    resource:
+        path: ../src/App/Users/Controller/
+        namespace: App\App\Users\Controller
     type: attribute
