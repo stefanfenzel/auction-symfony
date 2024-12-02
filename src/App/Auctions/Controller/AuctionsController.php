@@ -94,4 +94,18 @@ final  class AuctionsController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/auctions/{id}/delete', name: 'auctions_delete', requirements: ['id' => Requirement::UUID_V7])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function delete(string $id, DoctrineAuctionRepository $repository): Response
+    {
+        $auction = $repository->findById(Uuid::fromString($id));
+        if ($auction instanceof Auction && $auction->getUser()->getId() !== $this->getUser()->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $repository->delete(Uuid::fromString($id));
+
+        return $this->redirectToRoute('auctions');
+    }
 }
