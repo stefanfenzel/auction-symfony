@@ -4,16 +4,28 @@ declare(strict_types=1);
 
 namespace App\App\Auctions\Controller;
 
+use App\App\Auctions\Form\AuctionFormType;
+use App\Domain\Auctions\Auction;
 use App\Domain\Uuid;
 use App\Domain\UuidFactory;
 use App\Infrastructure\Auctions\Repository\DoctrineAuctionRepository;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final  class AuctionsController extends AbstractController
 {
+    public function __construct(
+        private readonly UuidFactory $uuidFactory,
+        private readonly DoctrineAuctionRepository $repository,
+    )
+    {
+    }
+
     #[Route('/home', name: 'home')]
     public function home(DoctrineAuctionRepository $repository): Response
     {
@@ -46,7 +58,7 @@ final  class AuctionsController extends AbstractController
         ]);
     }
 
-    #[Route('/auctions/{id}', name: 'auctions_show')]
+    #[Route('/auctions/{id}', name: 'auctions_show', requirements: ['id' => Requirement::UUID_V7])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function show(string $id, DoctrineAuctionRepository $repository): Response
     {
@@ -54,6 +66,32 @@ final  class AuctionsController extends AbstractController
 
         return $this->render('auctions/show.html.twig', [
             'auction' => $auction,
+        ]);
+    }
+
+    #[Route('/auctions/create', name: 'auctions_create')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function create(Request $request): Response
+    {
+        $auction = new Auction();
+        $form = $this->createForm(AuctionFormType::class, $auction);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Auction $auction */
+            $auction = $form->getData();
+            $auction->setId($this->uuidFactory->create()->toString());
+            $auction->setUser($this->getUser());
+            $auction->setCreatedAt(new DateTimeImmutable());
+            $auction->setUpdatedAt(new DateTimeImmutable());
+
+            $this->repository->save($auction);
+
+            return $this->redirectToRoute('auctions_show', ['id' => $auction->getId()]);
+        }
+
+        return $this->render('auctions/create.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

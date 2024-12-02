@@ -54,14 +54,21 @@ class DoctrineAuctionRepository extends ServiceEntityRepository implements Aucti
 
     public function save(Auction $auction): void
     {
-        $this->_em->persist($auction);
-        $this->_em->flush();
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($auction);
+        $entityManager->flush();
     }
 
     public function delete(Uuid $id): void
     {
+        $entityManager = $this->getEntityManager();
         $auction = $this->findById($id);
-        $this->_em->remove($auction);
-        $this->_em->flush();
+
+        if ($auction === null) {
+            return;
+        }
+
+        $entityManager->remove($auction);
+        $entityManager->flush();
     }
 }
