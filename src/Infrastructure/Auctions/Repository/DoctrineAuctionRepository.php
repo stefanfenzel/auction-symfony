@@ -34,7 +34,7 @@ class DoctrineAuctionRepository extends ServiceEntityRepository implements Aucti
     public function findByUserId(int $userId): ArrayCollection
     {
         $query = $this->createQueryBuilder('a')
-            ->andWhere('a.userId = :userId')
+            ->andWhere('a.user = :userId')
             ->setParameter('userId', $userId)
             ->orderBy('a.createdAt', 'ASC')
             ->getQuery();

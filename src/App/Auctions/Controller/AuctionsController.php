@@ -32,4 +32,15 @@ final  class AuctionsController extends AbstractController
             'auctions' => $auctions,
         ]);
     }
+
+    #[Route('/auctions', name: 'auctions')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function auctions(DoctrineAuctionRepository $repository): Response
+    {
+        $auctions = $repository->findByUserId($this->getUser()->getId());
+
+        return $this->render('auctions/auctions.html.twig', [
+            'auctions' => $auctions,
+        ]);
+    }
 }
