@@ -8,45 +8,49 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DoctrineUserRepository::class)]
 #[ORM\Table(name: 'users')]
 class User
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(name: 'id', type: Types::BIGINT, length: 20)]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
-
-    #[ORM\Column(name: 'email_verified_at', type: Types::TIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $emailVerifiedAt = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
-
-    #[ORM\Column(name:'remember_token', length: 100, nullable: true)]
-    private ?string $rememberToken = null;
-
-    #[ORM\Column(name: 'created_at')]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column(name: 'updated_at')]
-    private ?\DateTimeImmutable $updatedAt = null;
-
     /**
      * @var Collection<int, Auction>
      */
     #[ORM\OneToMany(targetEntity: Auction::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $auctions;
 
-    public function __construct()
-    {
+    public function __construct(
+        #[ORM\Id]
+        #[ORM\GeneratedValue]
+        #[ORM\Column(name: 'id', type: Types::BIGINT, length: 20)]
+        private ?int $id = null,
+
+        #[ORM\Column(length: 255)]
+        #[Assert\NotBlank]
+        private ?string $name = null,
+
+        #[ORM\Column(length: 255)]
+        #[Assert\NotBlank]
+        #[Assert\Email]
+        private ?string $email = null,
+
+        #[ORM\Column(name: 'email_verified_at', type: Types::TIME_MUTABLE, nullable: true)]
+        private ?\DateTimeInterface $emailVerifiedAt = null,
+
+        #[ORM\Column(length: 255)]
+        #[Assert\NotBlank]
+        private ?string $password = null,
+
+        #[ORM\Column(name: 'remember_token', length: 100, nullable: true)]
+        private ?string $rememberToken = null,
+
+        #[ORM\Column(name: 'created_at')]
+        private ?\DateTimeImmutable $createdAt = null,
+
+        #[ORM\Column(name: 'updated_at')]
+        private ?\DateTimeImmutable $updatedAt = null,
+    ) {
         $this->auctions = new ArrayCollection();
     }
 

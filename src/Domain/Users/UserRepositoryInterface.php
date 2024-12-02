@@ -6,5 +6,5 @@ namespace App\Domain\Users;
 
 interface UserRepositoryInterface
 {
-
+    public function save(User $user): void;
 }
