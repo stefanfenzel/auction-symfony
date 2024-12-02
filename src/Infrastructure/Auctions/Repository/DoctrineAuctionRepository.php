@@ -27,7 +27,6 @@ class DoctrineAuctionRepository extends ServiceEntityRepository implements Aucti
             ->setParameter('id', $id->toString())
             ->orderBy('a.createdAt', 'ASC')
             ->getQuery()
-            ->getResult()
             ->getOneOrNullResult();
     }
 

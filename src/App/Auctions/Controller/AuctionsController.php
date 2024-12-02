@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\App\Auctions\Controller;
 
+use App\Domain\Uuid;
+use App\Domain\UuidFactory;
 use App\Infrastructure\Auctions\Repository\DoctrineAuctionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +43,17 @@ final  class AuctionsController extends AbstractController
 
         return $this->render('auctions/auctions.html.twig', [
             'auctions' => $auctions,
+        ]);
+    }
+
+    #[Route('/auctions/{id}', name: 'auctions_show')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function show(string $id, DoctrineAuctionRepository $repository): Response
+    {
+        $auction = $repository->findById(Uuid::fromString($id));
+
+        return $this->render('auctions/show.html.twig', [
+            'auction' => $auction,
         ]);
     }
 }
