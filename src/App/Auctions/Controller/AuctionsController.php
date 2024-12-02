@@ -8,6 +8,7 @@ use App\Infrastructure\Auctions\Repository\DoctrineAuctionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final  class AuctionsController extends AbstractController
 {
@@ -17,6 +18,17 @@ final  class AuctionsController extends AbstractController
         $auctions = $repository->findRunningAuctions();
 
         return $this->render('home.html.twig', [
+            'auctions' => $auctions,
+        ]);
+    }
+
+    #[Route('/dashboard', name: 'dashboard')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function dashboard(DoctrineAuctionRepository $repository): Response
+    {
+        $auctions = $repository->findRunningAuctions();
+
+        return $this->render('dashboard.html.twig', [
             'auctions' => $auctions,
         ]);
     }

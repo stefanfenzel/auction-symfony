@@ -48,4 +48,9 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
         $entityManager->persist($user);
         $entityManager->flush();
     }
+
+    public function findByEmail(string $email): ?User
+    {
+        return $this->findOneBy(['email' => $email]);
+    }
 }

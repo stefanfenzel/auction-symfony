@@ -5,6 +5,8 @@
 {% block body %}
     <h1>Register</h1>
 
+    {% include 'components/flash-messages.html.twig' %}
+
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
