@@ -108,4 +108,29 @@ final  class AuctionsController extends AbstractController
 
         return $this->redirectToRoute('auctions');
     }
+
+    #[Route('/auctions/{id}/edit', name: 'auctions_edit', requirements: ['id' => Requirement::UUID_V7])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function edit(string $id, Request $request, DoctrineAuctionRepository $repository): Response
+    {
+        $auction = $repository->findById(Uuid::fromString($id));
+        if ($auction instanceof Auction && $auction->getUser()->getId() !== $this->getUser()->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $form = $this->createForm(AuctionFormType::class, $auction);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $auction->setUpdatedAt(new DateTimeImmutable());
+
+            $this->repository->save($auction);
+
+            return $this->redirectToRoute('auctions_show', ['id' => $auction->getId()]);
+        }
+
+        return $this->render('auctions/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 }

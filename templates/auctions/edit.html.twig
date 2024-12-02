@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Update auction{% endblock %}
+
+{% block body %}
+    <h1>Update auction</h1>
+
+    {% include 'components/flash-messages.html.twig' %}
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+{% endblock %}
