@@ -176,4 +176,15 @@ class Auction
 
         return $this;
     }
+
+    public function highestOffer(): float|null
+    {
+        $latestOffer = $this->offers->last();
+
+        if ($latestOffer && $latestOffer->getBidAmount() > $this->startPrice) {
+            return $latestOffer->getBidAmount();
+        }
+
+        return null;
+    }
 }

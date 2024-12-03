@@ -19,7 +19,8 @@ class DoctrineOfferRepository extends ServiceEntityRepository implements OfferRe
 
     public function save(Offer $offer): void
     {
-        $this->_em->persist($offer);
-        $this->_em->flush();
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($offer);
+        $entityManager->flush();
     }
 }

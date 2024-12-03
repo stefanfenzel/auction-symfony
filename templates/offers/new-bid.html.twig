@@ -1,0 +1,9 @@
+<h2>Place a bid</h2>
+
+<form action="{{ path('place_bid', {'id': auction.id}) }}" method="POST">
+    <div>
+        <label for="bidAmount">Price</label>
+        <input type="number" id="bidAmount" name="bidAmount" required>
+    </div>
+    <button type="submit">Place bid</button>
+</form>

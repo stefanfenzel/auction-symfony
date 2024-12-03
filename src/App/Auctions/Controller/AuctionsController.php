@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-final  class AuctionsController extends AbstractController
+final class AuctionsController extends AbstractController
 {
     public function __construct(
         private readonly UuidFactory $uuidFactory,
@@ -27,9 +27,13 @@ final  class AuctionsController extends AbstractController
     }
 
     #[Route('/home', name: 'home')]
-    public function home(DoctrineAuctionRepository $repository): Response
+    public function home(): Response
     {
-        $auctions = $repository->findRunningAuctions();
+        $auctions = $this->repository->findRunningAuctions();
+
+        if ($this->getUser()) {
+            return $this->redirectToRoute('dashboard');
+        }
 
         return $this->render('home.html.twig', [
             'auctions' => $auctions,
@@ -38,9 +42,9 @@ final  class AuctionsController extends AbstractController
 
     #[Route('/dashboard', name: 'dashboard')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function dashboard(DoctrineAuctionRepository $repository): Response
+    public function dashboard(): Response
     {
-        $auctions = $repository->findRunningAuctions();
+        $auctions = $this->repository->findRunningAuctions();
 
         return $this->render('dashboard.html.twig', [
             'auctions' => $auctions,
@@ -49,9 +53,9 @@ final  class AuctionsController extends AbstractController
 
     #[Route('/auctions', name: 'auctions')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function auctions(DoctrineAuctionRepository $repository): Response
+    public function auctions(): Response
     {
-        $auctions = $repository->findByUserId($this->getUser()->getId());
+        $auctions = $this->repository->findByUserId($this->getUser()->getId());
 
         return $this->render('auctions/auctions.html.twig', [
             'auctions' => $auctions,
@@ -60,9 +64,9 @@ final  class AuctionsController extends AbstractController
 
     #[Route('/auctions/{id}', name: 'auctions_show', requirements: ['id' => Requirement::UUID_V7])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function show(string $id, DoctrineAuctionRepository $repository): Response
+    public function show(string $id): Response
     {
-        $auction = $repository->findById(Uuid::fromString($id));
+        $auction = $this->repository->findById(Uuid::fromString($id));
 
         return $this->render('auctions/show.html.twig', [
             'auction' => $auction,
@@ -97,23 +101,23 @@ final  class AuctionsController extends AbstractController
 
     #[Route('/auctions/{id}/delete', name: 'auctions_delete', requirements: ['id' => Requirement::UUID_V7])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function delete(string $id, DoctrineAuctionRepository $repository): Response
+    public function delete(string $id): Response
     {
-        $auction = $repository->findById(Uuid::fromString($id));
+        $auction = $this->repository->findById(Uuid::fromString($id));
         if ($auction instanceof Auction && $auction->getUser()->getId() !== $this->getUser()->getId()) {
             throw $this->createAccessDeniedException();
         }
 
-        $repository->delete(Uuid::fromString($id));
+        $this->repository->delete(Uuid::fromString($id));
 
         return $this->redirectToRoute('auctions');
     }
 
     #[Route('/auctions/{id}/edit', name: 'auctions_edit', requirements: ['id' => Requirement::UUID_V7])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function edit(string $id, Request $request, DoctrineAuctionRepository $repository): Response
+    public function edit(string $id, Request $request): Response
     {
-        $auction = $repository->findById(Uuid::fromString($id));
+        $auction = $this->repository->findById(Uuid::fromString($id));
         if ($auction instanceof Auction && $auction->getUser()->getId() !== $this->getUser()->getId()) {
             throw $this->createAccessDeniedException();
         }

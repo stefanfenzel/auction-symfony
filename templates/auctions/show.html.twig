@@ -1,6 +1,21 @@
+{% include 'components/navbar.html.twig' %}
+
 {% include 'components/flash-messages.html.twig' %}
 
 <h2>{{ auction.title }}</h2>
 <p>{{ auction.description }}</p>
-<p>Price: {{ auction.startPrice }}</p>
+<p>Current Price: {{ auction.offers|last.bidAmount ?? auction.startPrice }}€</p>
+<p>Start price: {{ auction.startPrice }}€</p>
 <p>Ends at: {{ auction.endDate|date('Y-m-d H:i:s') }}</p>
+
+{% include 'offers/new-bid.html.twig' %}
+
+{% if app.user == auction.user %}
+    <a href="{{ path('auctions_edit', {'id': auction.id}) }}">Edit</a>
+    <a href="{{ path('auctions_delete', {'id': auction.id}) }}">Delete</a>
+{% endif %}
+
+<h3>Bids</h3>
+{% for bid in auction.offers|reverse %}
+    <p>{{ bid.bidAmount }}€ by {{ bid.user.email }}</p>
+{% endfor %}
