@@ -52,12 +52,13 @@ final class OffersController extends AbstractController
             return $this->redirectToRoute('auctions_show', ['id' => $auctionId]);
         }
 
-        $offer = new Offer();
-        $offer->setId($this->uuidFactory->create()->toString());
-        $offer->setUser($user);
-        $offer->setAuction($auction);
-        $offer->setBidAmount($amount);
-        $offer->setBidTime(new DateTimeImmutable());
+        $offer = new Offer(
+            $this->uuidFactory->create()->toString(),
+            $auction,
+            $user,
+            $amount,
+            new DateTimeImmutable(),
+        );
 
         $this->offerRepository->save($offer);
 
