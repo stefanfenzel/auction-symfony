@@ -5,6 +5,7 @@ namespace App\Domain\Auctions;
 use App\Domain\Offers\Offer;
 use App\Domain\Users\User;
 use App\Infrastructure\Auctions\Repository\DoctrineAuctionRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -14,137 +15,74 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'auctions')]
 class Auction
 {
-    #[ORM\Id]
-    #[ORM\Column(type: 'string', length: 36)]
-    private ?string $id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'auctions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $title = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
-
-    #[ORM\Column(name: 'start_price')]
-    private ?float $startPrice = null;
-
-    #[ORM\Column(name: 'end_date')]
-    private ?\DateTimeImmutable $endDate = null;
-
-    #[ORM\Column(name: 'created_at')]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column(name: 'updated_at')]
-    private ?\DateTimeImmutable $updatedAt = null;
-
     /**
      * @var Collection<int, Offer>
      */
     #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'auction', orphanRemoval: true)]
     private Collection $offers;
 
-    public function __construct()
+    public function __construct(
+        #[ORM\Id]
+        #[ORM\Column(type: 'string', length: 36)]
+        private string $id,
+        #[ORM\ManyToOne(inversedBy: 'auctions')]
+        #[ORM\JoinColumn(nullable: false)]
+        private User $user,
+        #[ORM\Column(length: 255)]
+        private string $title,
+        #[ORM\Column(type: Types::TEXT)]
+        private string $description,
+        #[ORM\Column(name: 'start_price')]
+        private float $startPrice,
+        #[ORM\Column(name: 'end_date')]
+        private DateTimeImmutable $endDate,
+        #[ORM\Column(name: 'created_at')]
+        private DateTimeImmutable $createdAt,
+        #[ORM\Column(name: 'updated_at')]
+        private DateTimeImmutable $updatedAt,
+    )
     {
         $this->offers = new ArrayCollection();
     }
 
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function setId(string $id): static
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): static
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    public function getStartPrice(): ?float
+    public function getStartPrice(): float
     {
         return $this->startPrice;
     }
 
-    public function setStartPrice(float $startPrice): static
-    {
-        $this->startPrice = $startPrice;
-
-        return $this;
-    }
-
-    public function getEndDate(): ?\DateTimeImmutable
+    public function getEndDate(): DateTimeImmutable
     {
         return $this->endDate;
     }
 
-    public function setEndDate(\DateTimeImmutable $endDate): static
-    {
-        $this->endDate = $endDate;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): DateTimeImmutable
     {
         return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 
     /**
@@ -159,7 +97,6 @@ class Auction
     {
         if (!$this->offers->contains($offer)) {
             $this->offers->add($offer);
-            $offer->setAuction($this);
         }
 
         return $this;
@@ -167,17 +104,12 @@ class Auction
 
     public function removeOffer(Offer $offer): static
     {
-        if ($this->offers->removeElement($offer)) {
-            // set the owning side to null (unless already changed)
-            if ($offer->getAuction() === $this) {
-                $offer->setAuction(null);
-            }
-        }
+        $this->offers->removeElement($offer);
 
         return $this;
     }
 
-    public function highestOffer(): float|null
+    public function getHighestOffer(): float|null
     {
         $latestOffer = $this->offers->last();
 

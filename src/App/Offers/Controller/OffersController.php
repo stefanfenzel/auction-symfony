@@ -46,7 +46,7 @@ final class OffersController extends AbstractController
             throw $this->createNotFoundException('Auction not found');
         }
 
-        $highestBid = $auction->highestOffer() ?? $auction->getStartPrice();
+        $highestBid = $auction->getHighestOffer() ?? $auction->getStartPrice();
         if ($amount <= $highestBid) {
             $this->addFlash('error', 'Bid amount must be greater than the current highest bid. Current highest bid: ' . $highestBid);
             return $this->redirectToRoute('auctions_show', ['id' => $auctionId]);

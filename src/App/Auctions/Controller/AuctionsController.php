@@ -77,17 +77,22 @@ final class AuctionsController extends AbstractController
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function create(Request $request): Response
     {
-        $auction = new Auction();
-        $form = $this->createForm(AuctionFormType::class, $auction);
+        $form = $this->createForm(AuctionFormType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Auction $auction */
-            $auction = $form->getData();
-            $auction->setId($this->uuidFactory->create()->toString());
-            $auction->setUser($this->getUser());
-            $auction->setCreatedAt(new DateTimeImmutable());
-            $auction->setUpdatedAt(new DateTimeImmutable());
+            $auctionData = $form->getData();
+            $auction = new Auction(
+                $this->uuidFactory->create()->toString(),
+                $this->getUser(),
+                $auctionData['title'],
+                $auctionData['description'],
+                $auctionData['startPrice'],
+                $auctionData['endDate'],
+                new DateTimeImmutable(),
+                new DateTimeImmutable(),
+            );
 
             $this->repository->save($auction);
 
@@ -126,8 +131,6 @@ final class AuctionsController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $auction->setUpdatedAt(new DateTimeImmutable());
-
             $this->repository->save($auction);
 
             return $this->redirectToRoute('auctions_show', ['id' => $auction->getId()]);

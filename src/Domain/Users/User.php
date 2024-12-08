@@ -164,7 +164,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->auctions->contains($auction)) {
             $this->auctions->add($auction);
-            $auction->setUser($this);
         }
 
         return $this;
@@ -172,12 +171,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeAuction(Auction $auction): static
     {
-        if ($this->auctions->removeElement($auction)) {
-            // set the owning side to null (unless already changed)
-            if ($auction->getUser() === $this) {
-                $auction->setUser(null);
-            }
-        }
+        $this->auctions->removeElement($auction);
 
         return $this;
     }
