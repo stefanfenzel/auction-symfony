@@ -39,21 +39,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         #[Assert\Email]
         private string $email,
 
-        #[ORM\Column(name: 'email_verified_at', type: Types::TIME_MUTABLE, nullable: true)]
-        private ?DateTimeInterface $emailVerifiedAt = null,
-
         #[ORM\Column(length: 255)]
         #[Assert\NotBlank]
         private string $password,
-
-        #[ORM\Column(name: 'remember_token', length: 100, nullable: true)]
-        private ?string $rememberToken = null,
 
         #[ORM\Column(name: 'created_at')]
         private DateTimeImmutable $createdAt,
 
         #[ORM\Column(name: 'updated_at')]
         private DateTimeImmutable $updatedAt,
+
+        #[ORM\Column(name: 'email_verified_at', type: Types::TIME_MUTABLE, nullable: true)]
+        private ?DateTimeInterface $emailVerifiedAt = null,
+
+        #[ORM\Column(name: 'remember_token', length: 100, nullable: true)]
+        private ?string $rememberToken = null,
     ) {
         $this->auctions = new ArrayCollection();
     }
