@@ -32,7 +32,7 @@ final class RegisterController extends AbstractController
             /** @var User $user */
             $userData = $form->getData();
             $user = new User(
-                $this->uuidFactory->create()->toString(),
+                $this->uuidFactory->create()->toString(), // todo implement uuid for user
                 $userData['name'],
                 $userData['email'],
                 password_hash($userData['password'], PASSWORD_DEFAULT),

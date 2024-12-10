@@ -28,7 +28,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         #[ORM\Id]
         #[ORM\GeneratedValue]
         #[ORM\Column(name: 'id', type: Types::BIGINT, length: 20)]
-        private int $id,
+        private int $id, // todo change to uuid
 
         #[ORM\Column(length: 255)]
         #[Assert\NotBlank]
