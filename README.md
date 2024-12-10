@@ -7,7 +7,7 @@ Ein Vergleich von Laravel, Symfony und Laminas". In meiner Bachelorarbeit unters
 Implementierung des Domain-Driven Designs in diesen drei Frameworks und zeige die Stärken und Schwächen der jeweiligen
 Ansätze auf.
 
-Dieses Projekt ist eine einfache Auktionsanwendung, die mit dem Laravel Framework entwickelt wurde. Das System
+Dieses Projekt ist eine einfache Auktionsanwendung, die mit dem Symfony Framework entwickelt wurde. Das System
 ermöglicht es Benutzern, Auktionen zu erstellen und daran teilzunehmen. Die Anwendung unterstützt grundlegende
 CRUD-Operationen für Auktionen und Gebote sowie die Benutzerauthentifizierung. Es gibt zwei Benutzerarten: Gäste und
 eingeloggte Benutzer.
